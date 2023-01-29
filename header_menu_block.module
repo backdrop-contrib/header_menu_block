@@ -71,13 +71,6 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
       '#title' => t('Site name'),
       '#default_value' => $settings['site_name'],
     );
-    $form['nav_menu'] = array(
-      '#title' => t('Navigation menu'),
-      '#type' => 'select',
-      '#options' => menu_get_menus(),
-      '#empty_option' => '- ' . t('None') . ' -',
-      '#default_value' => $settings['nav_menu'],
-    );
     $form['user_menu'] = array(
       '#title' => t('User menu'),
       '#type' => 'select',
@@ -85,6 +78,25 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
       '#empty_option' => '- ' . t('None') . ' -',
       '#default_value' => $settings['user_menu'],
     );
+    $form['nav_menu'] = array(
+      '#title' => t('Navigation menu'),
+      '#type' => 'select',
+      '#options' => menu_get_menus(),
+      '#empty_option' => '- ' . t('None') . ' -',
+      '#default_value' => $settings['nav_menu'],
+    );
+    $form['nav_menu_settings'] = array(
+      '#title' => t('Settings for navigation menu'),
+      '#type' => 'fieldset',
+      '#states' => array(
+        'invisible' => array(
+          'select[name="block_settings[nav_menu]"]' => array('value' => ''),
+        ),
+      ),
+    );
+    module_load_include('inc', 'system', 'system.menu');
+    $configs = $settings['nav_menu_settings']['menu_options'];
+    $form['nav_menu_settings']['menu_options'] = _system_block_configure($delta, $configs);
   }
 
   return $form;
