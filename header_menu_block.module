@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * Implements hook_config_info().
+ */
+function header_menu_block_config_info() {
+  $prefixes['header_menu_block.settings'] = array(
+    'label' => t('Header Menu Block settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+
+/**
+ * Implements hook_block_info().
+ */
+function header_menu_block_block_info() {
+  $blocks['header_menu_block'] = array(
+    'info' => t('Header menu block'),
+    'description' => t('Contains elements typical of a site header including the site logo, name, slogan, and optionally a navigational menu.'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * Generate a block with a promotional link to BackdropCMS.org and
+ * all header_menu_block menu blocks.
+ */
+function header_menu_block_block_view($delta = '', $settings = array(), $contexts = array()) {
+  $block = array();
+  switch ($delta) {
+    case 'header_menu_block':
+      $block['subject'] = NULL;
+      $block['content'] = header_menu_block_view($settings);
+      return $block;
+
+  }
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function header_menu_block_block_configure($delta = '', $settings = array()) {
+  $form = array();
+  dpm($settings);
+  // $settings = $settings['components'];
+  if ($delta === 'header_menu_block') {
+    $settings += array(
+      'logo' => TRUE,
+      'site_name' => TRUE,
+      'nav_menu' => 'main-menu',
+      'user_menu' => 'user-menu',
+    );
+
+    $form['help'] = array(
+      '#type' => 'help',
+      '#markup' => t('Show or hide various components of your site header. To change the values of these components, visit the !site_info page.',
+        array('!site_info' => l(t('Site information'), 'admin/config/system/site-information'))),
+    );
+    $form['logo'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Logo'),
+      '#default_value' => $settings['logo'],
+    );
+    $form['site_name'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Site name'),
+      '#default_value' => $settings['site_name'],
+    );
+    $form['nav_menu'] = array(
+      '#title' => t('Navigation menu'),
+      '#type' => 'select',
+      '#options' => menu_get_menus(),
+      '#empty_option' => '- ' . t('None') . ' -',
+      '#default_value' => $settings['nav_menu'],
+    );
+    $form['user_menu'] = array(
+      '#title' => t('User menu'),
+      '#type' => 'select',
+      '#options' => menu_get_menus(),
+      '#empty_option' => '- ' . t('None') . ' -',
+      '#default_value' => $settings['user_menu'],
+    );
+  }
+
+  return $form;
+}
+
+function header_menu_block_block_save($delta, &$edit = array()) {
+    dpm($edit);
+  if (empty($edit['logo']) && empty($edit['site_name']) && empty($edit['nav_menu']) && empty($edit['user_menu'])) {
+    form_set_error('', t('You must select at least one component'));
+  }
+}
+
+// hook_block_view_MODULE_DELTA_alter
+function header_menu_block_view($settings) {
+  return theme('header_menu_block', array('settings' => $settings));
+}
+
+// hook_block_view_MODULE_DELTA_alter
+function header_menu_block_preprocess_header_menu_block(&$variables) {
+  $settings = $variables['settings'];
+
+  $site_config = config('system.core');
+  $variables['logo']            = $settings['logo'] ? backdrop_get_logo() : NULL;
+  $variables['logo_attributes'] = $settings['logo'] ? array_diff_key(backdrop_get_logo_info(), array('path' => '')) : array();
+  $variables['site_name']       = $settings['site_name'] ? check_plain($site_config->get('site_name')) : '';
+  $variables['front_page']      = url();
+  $variables['language_switcher']      = NULL;
+
+  $nav_menu = $settings['nav_menu'] ? menu_navigation_links($settings['nav_menu']) : NULL;
+  $variables['nav_menu']        = $nav_menu ? theme('links__header_menu', array('links' => $nav_menu)) : NULL;
+
+  $user_menu = $settings['user_menu'] ? menu_navigation_links($settings['user_menu']) : NULL;
+  $variables['user_menu']        = $user_menu ? theme('links__header_menu', array('links' => $user_menu)) : NULL;
+}
+
+
+function header_menu_block_theme() {
+  return array(
+    'header_menu_block' => array(
+      'variables' => array('settings' => array()),
+      'template' => 'templates/header-menu-block', 
+    ),
+  );
+}

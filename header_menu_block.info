@@ -1,0 +1,7 @@
+name = Header Menu Block
+description = Provides alternative arrangements of Site Name, Logo and Menu.
+package = Blocks 
+type = module
+backdrop = 1.x
+
+stylesheets[all][] = css/header-menu-block.css
