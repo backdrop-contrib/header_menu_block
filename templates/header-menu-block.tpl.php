@@ -43,12 +43,12 @@
   <?php if ($nav_menu || $language_switcher): ?>
     <div class="menus-and-switcher">
       <?php if ($nav_menu): ?>
-        <nav class="header-menu-menu custom-nav-menu">
+        <nav class="header-menu custom-nav-menu">
           <?php print $nav_menu; ?>
         </nav>
       <?php endif; ?>
       <?php if ($user_menu): ?>
-        <nav class="header-menu-menu custom-user-menu">
+        <nav class="header-menu custom-user-menu">
           <?php print $user_menu; ?>
         </nav>
       <?php endif; ?>
