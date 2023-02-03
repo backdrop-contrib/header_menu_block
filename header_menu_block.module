@@ -128,6 +128,7 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
 
   module_load_include('inc', 'system', 'system.menu');
   $configs = $settings['nav_menu_settings']['menu_options'];
+  dpm($settings);
   $configs += system_menu_block_defaults($settings['nav_menu']);
   $data = system_menu_block_build($configs);
   dpm($data);
@@ -136,8 +137,14 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   // $variables['nav_menu']        = $nav_menu ? theme('links__header_menu', array('links' => $nav_menu)) : NULL;
   $variables['nav_menu'] = backdrop_render($data['content']);
 
-  $user_menu = $settings['user_menu'] ? menu_navigation_links($settings['user_menu']) : NULL;
-  $variables['user_menu']        = $user_menu ? theme('links__header_menu', array('links' => $user_menu)) : NULL;
+  $configs = system_menu_block_defaults('user-menu');
+  $data = system_menu_block_build($configs);
+  dpm($data);
+  // Add the sm class so styles don't mess with flexbox.
+  $data['content']['#wrapper_attributes']['class'][] = 'sm';
+ // $user_menu = $settings['user_menu'] ? menu_navigation_links($settings['user_menu']) : NULL;
+  $variables['user_menu'] = backdrop_render($data['content']);
+  // $variables['user_menu']        = $user_menu ? theme('links__header_menu', array('links' => $user_menu)) : NULL;
 }
 
 

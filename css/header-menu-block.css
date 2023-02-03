@@ -24,21 +24,26 @@
 
 .menus-and-switcher {
   align-items: baseline;
+  font-size: smaller;
 }
-.custom-user-menu {
+.custom-nav-menu + .custom-user-menu {
+  padding-inline-start: 2em !important;
+  margin-inline-start: 2em;
   position: relative;
-  padding-inline-start: 10px;
-  font-size: small;
 }
-.header-menu {
+.header-menu-block {
   display: flex;
   align-items: center;
+  line-height: 1.5 !important;
+}
+.header-menu-block ul li a {
+  line-height: 1.5 !important;
 }
 .custom-header-wrapper {
   justify-content: space-between;
   align-items: center;
-  font-size: small;
-  margin-top: 2rem;
+  /* font-size: small; */
+  margin: 2rem 0;
 }
 .header-logo {
   /* margin-right: 1rem; */
@@ -47,27 +52,27 @@
   margin: 0;
 }
 @media (min-width: 48em) {
-  .header-menu {
+  .header-menu-block {
     float: none !important;
   }
 }
 
+.custom-nav-menu + .custom-user-menu {
+}
 @media (min-width: 75rem) {
-  .custom-user-menu:before {
+  .custom-nav-menu + .custom-user-menu:before {
     position: absolute;
-    inset-block-start: 40%;
-    inset-inline-start: 0;
-    width: 1px;
+    width: 2px;
     height: 1rem;
     content: "";
-    transform: translateY(-20%);
     background-color: #fff;
+    inset-inline-start: 0%;
   }
 }
 
-.l-header .menu a, .header-menu a {
+.l-header .menu a, .header-menu-block a {
   line-height: unset !important;
-  padding: 0 0.5rem !important;
+  padding: 0 0.8rem !important;
 }
 
 @media (min-width: 48em) {
@@ -83,6 +88,40 @@
   padding: 1rem !important;
 }
 @media (min-width: 34em)
-.l-header .menu a, .header-menu a {
+.l-header .menu a, .header-menu-block a {
   padding: 1rem 1.25rem;
+}
+.l-header .header-menu-block {
+  padding: 0;
+}
+.l-header .header-menu-block li {
+  display: inline;
+  list-style-type: none;
+  padding: 0 0.5em;
+  margin: 0;
+}
+.l-header .header-menu-block li.last a {
+  border-bottom: 0;
+}
+.l-header ul.menu a,
+.js .menu-dropdown a,
+.js .menu-dropdown a:hover,
+.js .menu-dropdown a:focus,
+.js .menu-dropdown a:active,
+/* Prevents 2+ level menu items with child items from "jumping" when their 
+   child items are hovered over. */
+.js .menu-dropdown .has-children a {
+  height: unset !important;
+  line-height: unset !important;
+}
+.l-header ul.menu {
+  font-size: unset !important; 
+  margin: 0;
+  padding: 0;
+  line-height: 1.5 !important;
+}
+.l-header ul.menu a, .js .menu-dropdown a, .js .menu-dropdown a:hover, .js .menu-dropdown a:focus, .js .menu-dropdown a:active, .js .menu-dropdown .has-children a {
+  height: 2.4em;
+  line-height: 2.4em;
+  padding: 0 0.8em;
 }
