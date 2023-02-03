@@ -95,7 +95,12 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
       ),
     );
     module_load_include('inc', 'system', 'system.menu');
-    $configs = $settings['nav_menu_settings']['menu_options'];
+    if (isset($settings['nav_menu_settings']['menu_options'])) {
+      $configs = $settings['nav_menu_settings']['menu_options'];
+    }
+    else {
+      $configs = system_menu_block_defaults('main-menu');
+    }
     $form['nav_menu_settings']['menu_options'] = _system_block_configure($delta, $configs);
   }
 
