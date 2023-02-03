@@ -24,7 +24,7 @@
 
 .menus-and-switcher {
   align-items: baseline;
-  font-size: smaller;
+  /* font-size: smaller; */
 }
 .custom-nav-menu + .custom-user-menu {
   padding-inline-start: 2em !important;
@@ -99,6 +99,7 @@
   list-style-type: none;
   padding: 0 0.5em;
   margin: 0;
+  float: left;
 }
 .l-header .header-menu-block li.last a {
   border-bottom: 0;
