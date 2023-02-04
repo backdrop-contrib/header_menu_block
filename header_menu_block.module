@@ -150,6 +150,13 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
  // $user_menu = $settings['user_menu'] ? menu_navigation_links($settings['user_menu']) : NULL;
   $variables['user_menu'] = backdrop_render($data['content']);
   // $variables['user_menu']        = $user_menu ? theme('links__header_menu', array('links' => $user_menu)) : NULL;
+
+  // Search block.
+  backdrop_add_js(backdrop_get_path('module', 'header_menu_block') . '/js/header_menu_block.js');
+
+  $search_form = backdrop_get_form('search_block_form');
+  $search_form['actions']['submit']['#access'] = FALSE;
+  $variables['search_form'] = backdrop_render($search_form);
 }
 
 

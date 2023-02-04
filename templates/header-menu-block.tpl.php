@@ -64,5 +64,12 @@
         <?php endif; ?>
       <?php endif; ?>
     </div> <!-- /#logo-and-name -->
+    <div class="header-search">
+      <?php print $search_form; ?>
+      <button class="btn">
+        <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
+      </button>
+    </div>
+
   <?php endif; ?>
 </div> <!-- /#logo-and-name -->
