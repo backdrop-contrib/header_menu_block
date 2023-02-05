@@ -130,6 +130,8 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   $variables['site_name']       = $settings['site_name'] ? check_plain($site_config->get('site_name')) : '';
   $variables['front_page']      = url();
   $variables['language_switcher']      = NULL;
+  $variables['magnifier']      =   backdrop_get_path('module', 'header_menu_block') . '/images/magnifying-glass-solid.svg';
+
 
   module_load_include('inc', 'system', 'system.menu');
   $configs = $settings['nav_menu_settings']['menu_options'];
