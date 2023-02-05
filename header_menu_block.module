@@ -52,6 +52,7 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
       'site_name' => TRUE,
       'nav_menu' => 'main-menu',
       'user_menu' => 'user-menu',
+      'search_form' => FALSE,
     );
 
     $form['help'] = array(
@@ -68,6 +69,11 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
       '#type' => 'checkbox',
       '#title' => t('Site name'),
       '#default_value' => $settings['site_name'],
+    );
+    $form['search_form'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Show search form'),
+      '#default_value' => $settings['search_form'],
     );
     $form['user_menu'] = array(
       '#title' => t('User menu'),
@@ -151,9 +157,12 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   // Search block.
   backdrop_add_js(backdrop_get_path('module', 'header_menu_block') . '/js/header_menu_block.js');
 
-  $search_form = backdrop_get_form('search_block_form');
-  $search_form['actions']['submit']['#access'] = FALSE;
-  $variables['search_form'] = backdrop_render($search_form);
+  $variables['search_form'] = FALSE;
+  if ($settings['search_form']) {
+    $search_form = backdrop_get_form('search_block_form');
+    $search_form['actions']['submit']['#access'] = FALSE;
+    $variables['search_form'] = backdrop_render($search_form);
+  }
 }
 
 
