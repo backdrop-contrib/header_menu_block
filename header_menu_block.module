@@ -26,9 +26,6 @@ function header_menu_block_block_info() {
 
 /**
  * Implements hook_block_view().
- *
- * Generate a block with a promotional link to BackdropCMS.org and
- * all header_menu_block menu blocks.
  */
 function header_menu_block_block_view($delta = '', $settings = array(), $contexts = array()) {
   $block = array();
@@ -111,6 +108,9 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
   return $form;
 }
 
+/**
+ * Implements hook_block_save().
+ */
 function header_menu_block_block_save($delta, &$edit = array()) {
   $edit['nav_menu_settings']['menu_options']['menu_name'] = $edit['nav_menu'];
   if (empty($edit['logo']) && empty($edit['site_name']) && empty($edit['nav_menu']) && empty($edit['user_menu'])) {
@@ -118,31 +118,31 @@ function header_menu_block_block_save($delta, &$edit = array()) {
   }
 }
 
-// hook_block_view_MODULE_DELTA_alter
+/**
+ * Implements hook_block_view().
+ */
 function header_menu_block_view($settings) {
   return theme('header_menu_block', array('settings' => $settings));
 }
 
-// hook_block_view_MODULE_DELTA_alter
+/**
+ * Implements hook_preprocess_hook().
+ */
 function header_menu_block_preprocess_header_menu_block(&$variables) {
   $settings = $variables['settings'];
 
   $site_config = config('system.core');
-  $variables['logo']            = $settings['logo'] ? backdrop_get_logo() : NULL;
+  $variables['logo'] = $settings['logo'] ? backdrop_get_logo() : NULL;
   $variables['logo_attributes'] = $settings['logo'] ? array_diff_key(backdrop_get_logo_info(), array('path' => '')) : array();
-  $variables['site_name']       = $settings['site_name'] ? check_plain($site_config->get('site_name')) : '';
-  $variables['front_page']      = url();
-  $variables['language_switcher']      = NULL;
-  $variables['magnifier']      =   backdrop_get_path('module', 'header_menu_block') . '/images/magnifying-glass-solid.svg';
-
+  $variables['site_name'] = $settings['site_name'] ? check_plain($site_config->get('site_name')) : '';
+  $variables['front_page'] = url();
+  $variables['language_switcher'] = NULL;
 
   module_load_include('inc', 'system', 'system.menu');
   $configs = $settings['nav_menu_settings']['menu_options'];
   $configs += system_menu_block_defaults($settings['nav_menu']);
   $data = system_menu_block_build($configs);
 
-  // $nav_menu = $settings['nav_menu'] ? menu_navigation_links($settings['nav_menu']) : NULL;
-  // $variables['nav_menu']        = $nav_menu ? theme('links__header_menu', array('links' => $nav_menu)) : NULL;
   $variables['nav_menu'] = backdrop_render($data['content']);
 
   $configs = system_menu_block_defaults('user-menu');
@@ -150,9 +150,7 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
 
   // Add the sm class so styles don't mess with flexbox.
   $data['content']['#wrapper_attributes']['class'][] = 'sm';
- // $user_menu = $settings['user_menu'] ? menu_navigation_links($settings['user_menu']) : NULL;
   $variables['user_menu'] = backdrop_render($data['content']);
-  // $variables['user_menu']        = $user_menu ? theme('links__header_menu', array('links' => $user_menu)) : NULL;
 
   // Search block.
   backdrop_add_js(backdrop_get_path('module', 'header_menu_block') . '/js/header_menu_block.js');
@@ -165,7 +163,9 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   }
 }
 
-
+/**
+ * Implements hook_theme().
+ */
 function header_menu_block_theme() {
   return array(
     'header_menu_block' => array(

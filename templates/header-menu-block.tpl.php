@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Display logo to left of site name
+ * Display site header components.
  *
  * Available variables:
  *
@@ -15,9 +15,13 @@
  * - $front_page: The URL of the front page. Use this instead of $base_path, when
  *   linking to the front page. This includes the language domain or prefix.
  * - $site_name: The name of the site, empty when display has been disabled.
- * - $site_slogan: The site slogan, empty when display has been disabled.
+ * - $language_switcher: The site language switcher.
+ * - $nav_menu: The themed navigation menu.
+ * - $user_menu: The themed user menu.
+ * - $search_form: The themed search form.
  */
 ?>
+
 
 <div class="custom-header-wrapper">
   <?php if ($site_name || $logo): ?>
