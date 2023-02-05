@@ -7,15 +7,15 @@
 
 Backdrop.behaviors.header_menu_block = {
   attach: function() {
-    const search = document.querySelector('.header-search')
-    const mas = document.querySelector('.menus-and-switcher')
-    const btn = document.querySelector('.btn')
-    const input = document.querySelector('.custom-header-wrapper .search-block-wrapper')
-    btn.addEventListener('click', () => {
-        search.classList.toggle('active')
-        mas.classList.toggle('active')
-        input.focus()
-    })
+    const search = $('.header-search')
+    const mas = $('.menus-and-switcher')
+    const btn = $('.btn')
+    const input = $('.custom-header-wrapper .search-block-wrapper')
+    btn.click(function () {
+      search.toggleClass('active');
+      mas.toggle();
+      input.focus();
+    });
 
     // $('a.dev-explain').click(function () {
       // qid = $(this).attr("qid");
