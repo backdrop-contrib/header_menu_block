@@ -163,6 +163,14 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   }
 }
 
+
+/**
+ * Implements hook_preprocess_hook().
+ */
+function header_menu_block_preprocess_layout(&$variables) {
+  $variables['classes'][] = 'header-menu-block-enabled';
+}
+
 /**
  * Implements hook_theme().
  */

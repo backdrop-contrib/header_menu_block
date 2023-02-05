@@ -54,7 +54,7 @@
   justify-content: space-between;
   align-items: center;
   /* font-size: small; */
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 .header-logo {
   /* margin-right: 1rem; */
@@ -208,4 +208,10 @@
 }
 .header-search.active svg {
   background-color: #ffffff;
+}
+
+/* This module adds a class to the layout template in a preprocess.
+ */
+.header-menu-block-enabled .l-header {
+  margin: 0;
 }
