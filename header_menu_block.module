@@ -183,7 +183,12 @@ function header_menu_block_build_language_menu($links) {
   $language_default = $language;
 
   // Create menu links for each language that isn't the currently active.
-  $child_menus = array();
+  $child_menus = array(
+    '#sorted' => TRUE,
+    '#depth' => 1,
+    '#theme_wrappers' => array('menu_tree__main_menu'),
+  );
+
   foreach ($links as $link) {
     if ($link['language']->langcode != $language_default->langcode) {
       $child_menus[$link['language']->langcode] = array(
@@ -209,9 +214,6 @@ function header_menu_block_build_language_menu($links) {
     '#below' =>  $child_menus,
     '#original_link' => array(),
   );
-  $menu_links['#below']['#sorted'] = TRUE;
-  $menu_links['#below']['#depth'] = 1;
-  $menu_links['#below']['#theme_wrappers'] =  array('menu_tree__main_menu');
 
   // Finally create a menu out of those links.
   $language_menu = array(
@@ -219,14 +221,18 @@ function header_menu_block_build_language_menu($links) {
     '#sorted' => TRUE,
     '#depth' => 0,
     '#theme_wrappers' => array('menu_tree__main_menu'),
+    '#wrapper_attributes' => array(
+      'class' => array('leaf', 'menu-dropdown'),
+      'data-menu-style' => 'dropdown',
+      'data-clickdown' => FALSE,
+    ),
+    '#attached' => array(
+      'library' => array(
+        array('system', 'backdrop.menus'),
+        array('system', 'smartmenus'),
+      ),
+    ),
   );
-
-  $language_menu['#wrapper_attributes']['class'][] = 'menu-dropdown';
-  $language_menu['#wrapper_attributes']['class'][] = 'sm';
-  $language_menu['#wrapper_attributes']['data-menu-style'] = 'dropdown';
-  $language_menu['#wrapper_attributes']['data-clickdown'] = FALSE;
-  $language_menu['#attached']['library'][] = array('system', 'backdrop.menus');
-  $language_menu['#attached']['library'][] = array('system', 'smartmenus');
 
   return $language_menu;
 }
