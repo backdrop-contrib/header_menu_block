@@ -50,6 +50,7 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
       'nav_menu' => 'main-menu',
       'user_menu' => 'user-menu',
       'search_form' => FALSE,
+      'language_menu' => FALSE,
     );
 
     $form['help'] = array(
@@ -72,6 +73,19 @@ function header_menu_block_block_configure($delta = '', $settings = array()) {
       '#title' => t('Show search form'),
       '#default_value' => $settings['search_form'],
     );
+    if (language_multilingual()) {
+      $form['language_menu'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Show language links'),
+        '#default_value' => $settings['language_menu'],
+      );
+    }
+    else {
+      $form['language_menu'] = array(
+        '#type' => 'value',
+        '#value' => FALSE,
+      );
+    }
     $form['user_menu'] = array(
       '#title' => t('User menu'),
       '#type' => 'select',
@@ -136,7 +150,6 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   $variables['logo_attributes'] = $settings['logo'] ? array_diff_key(backdrop_get_logo_info(), array('path' => '')) : array();
   $variables['site_name'] = $settings['site_name'] ? check_plain($site_config->get('site_name')) : '';
   $variables['front_page'] = url();
-  $variables['language_switcher'] = NULL;
 
   module_load_include('inc', 'system', 'system.menu');
   $configs = $settings['nav_menu_settings']['menu_options'];
@@ -163,7 +176,8 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   }
 
   // Language menu.
-  if (language_multilingual()) {
+  $variables['language_menu'] = FALSE;
+  if (language_multilingual() && $settings['language_menu']) {
     $path = backdrop_is_front_page() ? '<front>' : $_GET['q'];
     $links = language_negotiation_get_switch_links('language', $path);
 
