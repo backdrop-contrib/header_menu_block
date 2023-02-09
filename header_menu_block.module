@@ -161,8 +161,75 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
     $search_form['actions']['submit']['#access'] = FALSE;
     $variables['search_form'] = backdrop_render($search_form);
   }
+
+  // Language menu.
+  if (language_multilingual()) {
+    $path = backdrop_is_front_page() ? '<front>' : $_GET['q'];
+    $links = language_negotiation_get_switch_links('language', $path);
+
+    if (isset($links->links)) {
+      $language_menu = header_menu_block_build_language_menu($links->links);
+      $variables['language_menu'] = backdrop_render($language_menu);
+    }
+  }
+
 }
 
+/**
+ * Create a menu out of language links.
+ */
+function header_menu_block_build_language_menu($links) {
+  global $language ;
+  $language_default = $language;
+
+  // Create menu links for each language that isn't the currently active.
+  $child_menus = array();
+  foreach ($links as $link) {
+    if ($link['language']->langcode != $language_default->langcode) {
+      $child_menus[$link['language']->langcode] = array(
+        '#theme' => 'menu_link__main_menu',
+        '#attributes' => array('class' => array('leaf')),
+        '#title' => $link['language']->name,
+        '#href' => $link['href'],
+        '#localized_options' =>  array('language' => $link['language']),
+        '#below' =>  array(),
+        '#original_link' => array(),
+      );
+    }
+  }
+
+  // Now create a menu link for the currently active language and add all other
+  // languages as child menu items.
+  $menu_links = array(
+    '#theme' => 'menu_link__main_menu',
+    '#attributes' => array('class' => array('expanded', 'has-children')),
+    '#title' => $language_default->name,
+    '#href' => $link['href'],
+    '#localized_options' =>  array('language' => $language_default),
+    '#below' =>  $child_menus,
+    '#original_link' => array(),
+  );
+  $menu_links['#below']['#sorted'] = TRUE;
+  $menu_links['#below']['#depth'] = 1;
+  $menu_links['#below']['#theme_wrappers'] =  array('menu_tree__main_menu');
+
+  // Finally create a menu out of those links.
+  $language_menu = array(
+    'lang' => $menu_links,
+    '#sorted' => TRUE,
+    '#depth' => 0,
+    '#theme_wrappers' => array('menu_tree__main_menu'),
+  );
+
+  $language_menu['#wrapper_attributes']['class'][] = 'menu-dropdown';
+  $language_menu['#wrapper_attributes']['class'][] = 'sm';
+  $language_menu['#wrapper_attributes']['data-menu-style'] = 'dropdown';
+  $language_menu['#wrapper_attributes']['data-clickdown'] = FALSE;
+  $language_menu['#attached']['library'][] = array('system', 'backdrop.menus');
+  $language_menu['#attached']['library'][] = array('system', 'smartmenus');
+
+  return $language_menu;
+}
 
 /**
  * Implements hook_preprocess_hook().

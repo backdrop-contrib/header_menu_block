@@ -42,9 +42,9 @@
           </h1>
         <?php endif; ?>
       <?php endif; ?>
-    </div> <!-- /#logo-and-name -->
+    </div>
   <?php endif; ?>
-  <?php if ($nav_menu || $language_switcher): ?>
+  <?php if ($nav_menu || $user_menu): ?>
     <div class="menus-and-switcher">
       <?php if ($nav_menu): ?>
         <nav class="header-menu-block custom-nav-menu">
@@ -56,18 +56,7 @@
           <?php print $user_menu; ?>
         </nav>
       <?php endif; ?>
-      <?php if ($language_switcher): ?>
-        <?php if (!$is_front): ?>
-          <div class="site-name"><strong>
-            <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
-          </strong></div>
-        <?php else: /* Use h1 when the content title is empty */ ?>
-          <h1 class="site-name">
-            <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
-          </h1>
-        <?php endif; ?>
-      <?php endif; ?>
-    </div> <!-- /#logo-and-name -->
+    </div>
 
   <?php endif; ?>
   <?php if ($search_form): ?>
@@ -80,4 +69,11 @@
       </div>
     </div>
   <?php endif; ?>
-</div> <!-- /#logo-and-name -->
+  <?php if ($language_menu): ?>
+    <div class="menus-and-switcher">
+      <nav class="header-menu-block custom-language-menu">
+        <?php print $language_menu; ?>
+      </nav>
+    </div>
+  <?php endif; ?>
+</div>
