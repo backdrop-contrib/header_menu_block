@@ -1,6 +1,6 @@
 /**
  * @file
- * Behaviors for Devel.
+ * https://www.codingthai.com/hidden-search-bar-using-html-css-and-js/.
  */
 
 (function ($) {

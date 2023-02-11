@@ -144,6 +144,14 @@ function header_menu_block_view($settings) {
  */
 function header_menu_block_preprocess_header_menu_block(&$variables) {
   $settings = $variables['settings'];
+  $variables += array(
+    'logo' => FALSE,
+    'site_name' => FALSE,
+    'nav_menu' => FALSE,
+    'user_menu' => FALSE,
+    'search_form' => FALSE,
+    'language_menu' => FALSE,
+  );
 
   $site_config = config('system.core');
   $variables['logo'] = $settings['logo'] ? backdrop_get_logo() : NULL;
@@ -151,32 +159,36 @@ function header_menu_block_preprocess_header_menu_block(&$variables) {
   $variables['site_name'] = $settings['site_name'] ? check_plain($site_config->get('site_name')) : '';
   $variables['front_page'] = url();
 
-  module_load_include('inc', 'system', 'system.menu');
-  $configs = $settings['nav_menu_settings']['menu_options'];
-  $configs += system_menu_block_defaults($settings['nav_menu']);
-  $data = system_menu_block_build($configs);
+  // Navigation menu.
+  if ($settings['nav_menu']) {
+    module_load_include('inc', 'system', 'system.menu');
+    $configs = $settings['nav_menu_settings']['menu_options'];
+    $configs += system_menu_block_defaults($settings['nav_menu']);
+    $data = system_menu_block_build($configs);
 
-  $variables['nav_menu'] = backdrop_render($data['content']);
+    $variables['nav_menu'] = backdrop_render($data['content']);
+  }
 
-  $configs = system_menu_block_defaults('user-menu');
-  $data = system_menu_block_build($configs);
+  // User menu.
+  if ($settings['user_menu']) {
+    module_load_include('inc', 'system', 'system.menu');
+    $configs = system_menu_block_defaults('user-menu');
+    $data = system_menu_block_build($configs);
 
-  // Add the sm class so styles don't mess with flexbox.
-  $data['content']['#wrapper_attributes']['class'][] = 'sm';
-  $variables['user_menu'] = backdrop_render($data['content']);
+    // Add the sm class so styles don't mess with flexbox.
+    $data['content']['#wrapper_attributes']['class'][] = 'sm';
+    $variables['user_menu'] = backdrop_render($data['content']);
+  }
 
   // Search block.
-  backdrop_add_js(backdrop_get_path('module', 'header_menu_block') . '/js/header_menu_block.js');
-
-  $variables['search_form'] = FALSE;
   if ($settings['search_form']) {
+    backdrop_add_js(backdrop_get_path('module', 'header_menu_block') . '/js/header_menu_block.js');
     $search_form = backdrop_get_form('search_block_form');
     $search_form['actions']['submit']['#access'] = FALSE;
     $variables['search_form'] = backdrop_render($search_form);
   }
 
   // Language menu.
-  $variables['language_menu'] = FALSE;
   if (language_multilingual() && $settings['language_menu']) {
     $path = backdrop_is_front_page() ? '<front>' : $_GET['q'];
     $links = language_negotiation_get_switch_links('language', $path);
