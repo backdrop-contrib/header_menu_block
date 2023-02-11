@@ -139,8 +139,8 @@
 }
 
 .header-search {
-  position: relative;
   height: 2rem;
+  display: flex;
 }
 
 .header-search .search-block-wrapper {
@@ -149,7 +149,7 @@
   height: 2rem;
   width: 2rem;
   transition: width 0.3s ease;
-  display: none;
+  visibility: hidden;
 }
 .header-search .search-block-wrapper input {
   height: 1.8rem;
@@ -165,9 +165,6 @@
   border: 0;
   cursor: pointer;
   font-size: 24px;
-  position: absolute;
-  top: 0;
-  left: 0;
   height: 2rem;
   width: 2rem;
   box-sizing: border-box;
@@ -182,12 +179,10 @@
 .header-search.active .search-block-wrapper {
   width: 9rem;
   background-color: #fff;
-  display: block;
+  visibility: visible;
 }
 
 .header-search.active .btn {
-  transition: transform 0.3s ease;
-  transform: translateX(9rem);
   background-color: #fff;
   height: 2rem;
   width: 2rem;
@@ -200,11 +195,21 @@
 .header-search.active .magnifier {
   fill: #00ffff;
 }
+.header-search .closex-wrapper {
+  display: none;
+}
+.header-search.active .closex-wrapper {
+  display: inherit;
+}
+.header-search.active .magnifier-wrapper {
+  display: none;
+}
 .header-search svg {
   background: none;
   margin: auto;
   width: 100%;
   display: block;
+  max-height: 100%;
 }
 .header-search.active svg {
   background-color: #ffffff;
